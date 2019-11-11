@@ -1,25 +1,45 @@
 <template>
     <nav>
         <v-app-bar color="grey darken-4">
-            <v-app-bar-nav-icon @click="drawer = !drawer" class="white--text"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="white--text"></v-app-bar-nav-icon>
             <v-toolbar-title class="text-uppercase white--text">
                 <span class="font-weight-light">Vuetify</span>
                 <span class="font-weight-bold">Admin</span>
             </v-toolbar-title>
+            <v-spacer />
+            <v-layout>
+                <v-toolbar-items>
+                    <v-card-text>
+                        <div class="subheading white--text">{{ date }}</div>
+                        <div class="white--text">{{ time }}</div>
+                    </v-card-text>
+                </v-toolbar-items>
+            </v-layout>
+            <v-spacer />
+            <v-text-field
+                class="mx-4"
+                flat
+                hide-details
+                label="Buscar contato"
+                prepend-inner-icon="search"
+                solo-inverted
+            ></v-text-field>
             <v-spacer></v-spacer>
-            <v-col cols="12" sm="5" md="3">
-                <v-text-field class="mt-5" color="white" background-color="grey darken-2" append-icon="search" placeholder="Buscar contato" ></v-text-field>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-avatar>
-                <v-img :src="user.avatar"></v-img>
-            </v-avatar>
-            <label class="white--text">{{ user.name }}</label>
-            <label class="white--text">{{ user.login }}</label>
+            <v-layout>
+                <v-toolbar-items>
+                    <v-avatar class="mt-3">
+                        <v-img :src="user.avatar"></v-img>
+                    </v-avatar>
+                    <v-card-text>
+                        <div class="subheading white--text">{{ user.name }}</div>
+                        <div class="white--text">{{ user.login }}</div>
+                    </v-card-text>
+                </v-toolbar-items>
+            </v-layout>
         </v-app-bar>
 
-        <v-navigation-drawer app v-model="drawer" class="grey darken-3">
-            <v-list dense v-for="menu in menus" :key="menu.name">
+        <v-navigation-drawer v-model="drawer" app clipped class="grey darken-3">
+            <v-list v-for="menu in menus" :key="menu.name">
                 <v-subheader class="text-uppercase font-weight-bold">{{ menu.name }}</v-subheader>
                 <v-list-item-group v-model="menu.links">
                     <v-list-item v-for="link in menu.links" :key="link.text" router :to="link.route">
@@ -39,6 +59,8 @@
 <script>
 export default {
     data: () => ({
+        date: '',
+        time: '',
         drawer: false,
         user: {
             name: 'Joaquin Phoenix',
@@ -57,21 +79,31 @@ export default {
             {   
                 name: 'Painel',
                 links: [
-                    { icon: 'people', text: 'Filas', route: '/painel' },
-                    { icon: 'people', text: 'Campanhas', route: '/painel' },
-                    { icon: 'face', text: 'Agentes', route: '/painel' },
+                    { icon: 'people', text: 'Filas', route: '/' },
+                    { icon: 'people', text: 'Campanhas', route: '/' },
+                    { icon: 'face', text: 'Agentes', route: '/' },
                 ]
             },
             {   
                 name: 'Admin',
                 links: [
-                    { icon: 'face', text: 'Agentes', route: '/admin' },
-                    { icon: 'people', text: 'Filas', route: '/admin' },
-                    { icon: 'people', text: 'Campanhas', route: '/admin' },
-                    { icon: 'public', text: 'Discadores', route: '/admin' },
+                    { icon: 'face', text: 'Agentes', route: '/' },
+                    { icon: 'people', text: 'Filas', route: '/' },
+                    { icon: 'people', text: 'Campanhas', route: '/' },
+                    { icon: 'public', text: 'Discadores', route: '/' },
                 ]
             },
         ],
-    })
+    }),
+    created() {
+        setInterval(this.getNow, 1000);
+    },
+    methods: {
+        getNow: function() {
+            const today = new Date();
+            this.date = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear()
+            this.time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+        }
+    }
 }
 </script>

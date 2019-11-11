@@ -1,8 +1,8 @@
 <template>
   <v-app>
     
-    <Navbar />
-    <v-content class="mx-4 mb-4">
+    <v-content>
+      <Navbar />
       <router-view></router-view>
     </v-content>
 
@@ -17,7 +17,10 @@ export default {
   name: 'App',
   components: { Navbar },
   data: () => ({
-    //
+  
   }),
+  created () {
+    this.$vuetify.theme.dark = true
+  },
 };
 </script>
